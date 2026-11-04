@@ -36,3 +36,38 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify production server
+        run: npm run verify:production
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Full dependency audit guard
+        run: npm audit --audit-level=critical
+
+      - name: Playwright tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-failure-${{ github.run_id }}
+          path: |
+            output/playwright/report/
+            output/playwright/test-results/
+            output/playwright/test-results/**/*.png
+            output/playwright/test-results/**/*.webm
+            output/playwright/test-results/**/*.zip
+          if-no-files-found: ignore
+          retention-days: 7
