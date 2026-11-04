@@ -10,3 +10,23 @@ updates:
     open-pull-requests-limit: 5
     commit-message:
       prefix: deps
+    groups:
+      dependencies:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+    ignore:
+      # eslint-config-next 16 currently requires ESLint 9.
+      - dependency-name: eslint
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "04:00"
+      timezone: Asia/Shanghai
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
